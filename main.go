@@ -3,7 +3,12 @@ package main
 import (
     "database/sql"
     "fmt"
+    "math/rand"
+    "os"
     _ "github.com/lib/pq"
+    "github.com/imroc/req"
+    "strings"
+    "time"
 )
 
 const (
@@ -51,11 +56,45 @@ func channels() []string {
     return serials
 }
 
-func main() {
-    fmt.Println("Hello, world!")
+func getKey() string {
+    rawKey := os.Getenv("API_KEY")
+    splitKeys := strings.Split(rawKey, "|")
 
-    chans := channels()
-    for i := 0; i < len(chans); i++ {
-        fmt.Println(chans[i])
+    return splitKeys[rand.Intn(len(splitKeys))]
+}
+
+func getData(cs []string) string {
+    key := getKey()
+    url := "https://www.googleapis.com/youtube/v3/channels"
+    partStr := "snippet,contentDetails,brandingSettings,contentOwnerDetails,invideoPromotion,localizations,status,topicDetails"
+    idStr := strings.Join(cs, ",")
+
+    param := req.Param{
+        "part":  partStr,
+        "id": idStr,
+        "key": key,
+    }
+
+    r, err := req.Get(url, param)
+    if err != nil {
+        panic(err)
+    }
+
+    body, err := r.ToString()
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Println(body)
+
+    return ""
+}
+
+func main() {
+    for {
+        rand.Seed(time.Now().Unix())
+
+        chans := channels()
+        getData(chans)
     }
 }
