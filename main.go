@@ -13,8 +13,20 @@ import (
 )
 
 const (
-    connStr = "user=postgres dbname=youtube host=192.168.1.63 port=30000 sslmode=disable"
+    defaultHost = "192.168.1.63"
+    defaultPort = "30000"
 )
+
+func connStr() string {
+    host := os.Getenv("DB_HOST")
+    port := os.Getenv("DB_PORT")
+
+    if len(host) == 0 || len(port) == 0 {
+        return fmt.Sprintf("user=postgres dbname=youtube host=%s port=%s sslmode=disable", defaultHost, defaultPort)
+    } else {
+        return fmt.Sprintf("user=postgres dbname=youtube host=%s port=%s sslmode=disable", host, port)
+    }
+}
 
 type Data struct {
     title     string
@@ -38,7 +50,7 @@ func (that Data) String() string {
 }
 
 func connection() *sql.DB {
-    db, err := sql.Open("postgres", connStr)
+    db, err := sql.Open("postgres", connStr())
     if err != nil {
         panic(err)
     }
