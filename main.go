@@ -17,12 +17,24 @@ const (
 )
 
 type Data struct {
-    title string
-    serial string
-    customUrl string
-    description string
-    country string
-    publishedAt string
+    title     string
+    serial    string
+    customUrl *string
+    country   *string
+    joined    string
+}
+
+func nilToEmpty(str *string) string {
+    if str == nil {
+        return "nil"
+    }
+
+    return *str
+}
+
+func (this Data) String() string {
+    return fmt.Sprintf("{%s, %s, %s, %s, %s}",
+        this.title, this.serial, nilToEmpty(this.customUrl), nilToEmpty(this.country), this.joined)
 }
 
 func connection() *sql.DB {
@@ -112,10 +124,20 @@ func getData(cs []string) []Data {
             {
                 snippet := item["snippet"].(map[string]interface{})
                 data.title = snippet["title"].(string)
-                data.description = snippet["description"].(string)
-                data.customUrl = snippet["customUrl"].(string)
-                data.publishedAt = snippet["publishedAt"].(string)
-                data.country = snippet["country"].(string)
+                if snippet["customUrl"] == nil {
+                    data.customUrl = nil
+                } else {
+                    str := snippet["customUrl"].(string)
+                    data.customUrl = &str
+                }
+
+                data.joined = snippet["publishedAt"].(string)
+                if snippet["country"] == nil {
+                    data.country = nil
+                } else {
+                    str := snippet["country"].(string)
+                    data.country = &str
+                }
             }
         }
 
