@@ -3,10 +3,11 @@ package main
 import (
     "database/sql"
     "fmt"
+    "github.com/imroc/req"
+    _ "github.com/lib/pq"
     "math/rand"
     "os"
-    _ "github.com/lib/pq"
-    "github.com/imroc/req"
+    "runtime"
     "strings"
     "time"
 )
@@ -14,6 +15,15 @@ import (
 const (
     connStr = "user=postgres dbname=youtube host=192.168.1.63 port=30000 sslmode=disable"
 )
+
+type Data struct {
+    title string
+    serial string
+    customUrl string
+    description string
+    country string
+    publishedAt string
+}
 
 func connection() *sql.DB {
     db, err := sql.Open("postgres", connStr)
@@ -25,7 +35,7 @@ func connection() *sql.DB {
 }
 
 func channels() []string {
-    sqlStr := "SELECT serial FROM youtube.entities.channels ORDER BY RANDOM() LIMIT 50"
+    sqlStr := "select C.serial from youtube.entities.channels C WHERE C.serial NOT IN (select C.serial from youtube.entities.chans C) LIMIT 50"
     db := connection()
     defer func() {
         err := db.Close()
@@ -63,10 +73,10 @@ func getKey() string {
     return splitKeys[rand.Intn(len(splitKeys))]
 }
 
-func getData(cs []string) string {
+func getJson(cs []string) interface{} {
     key := getKey()
     url := "https://www.googleapis.com/youtube/v3/channels"
-    partStr := "snippet,contentDetails,brandingSettings,contentOwnerDetails,invideoPromotion,localizations,status,topicDetails"
+    partStr := "snippet,topicDetails"
     idStr := strings.Join(cs, ",")
 
     param := req.Param{
@@ -80,14 +90,40 @@ func getData(cs []string) string {
         panic(err)
     }
 
-    body, err := r.ToString()
+    var foo interface{}
+    err = r.ToJSON(&foo)
     if err != nil {
         panic(err)
     }
 
-    fmt.Println(body)
+    return foo
+}
 
-    return ""
+func getData(cs []string) []Data {
+    jsonMap := getJson(cs).(map[string]interface{})
+    items := jsonMap["items"].([]interface{})
+
+    datas := make([]Data, len(cs))
+    for i := range items {
+        var data Data
+        item := items[i].(map[string]interface{})
+        {
+            data.serial = item["id"].(string)
+            {
+                snippet := item["snippet"].(map[string]interface{})
+                data.title = snippet["title"].(string)
+                data.description = snippet["description"].(string)
+                data.customUrl = snippet["customUrl"].(string)
+                data.publishedAt = snippet["publishedAt"].(string)
+                data.country = snippet["country"].(string)
+            }
+        }
+
+        fmt.Println(data)
+        datas[i] = data
+    }
+
+    return datas
 }
 
 func main() {
@@ -96,5 +132,6 @@ func main() {
 
         chans := channels()
         getData(chans)
+        runtime.GC()
     }
 }
