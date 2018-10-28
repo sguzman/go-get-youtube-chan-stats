@@ -32,9 +32,9 @@ func nilToEmpty(str *string) string {
     return *str
 }
 
-func (this Data) String() string {
+func (that Data) String() string {
     return fmt.Sprintf("{%s, %s, %s, %s, %s}",
-        this.title, this.serial, nilToEmpty(this.customUrl), nilToEmpty(this.country), this.joined)
+        that.title, that.serial, nilToEmpty(that.customUrl), nilToEmpty(that.country), that.joined)
 }
 
 func connection() *sql.DB {
