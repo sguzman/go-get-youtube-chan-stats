@@ -160,12 +160,34 @@ func getData(cs []string) []Data {
     return datas
 }
 
-func main() {
-    for {
-        rand.Seed(time.Now().Unix())
+func insert(ds []Data) {
+    db := connection()
+    defer func() {
+        err := db.Close()
+        if err != nil {
+            panic(err)
+        }
+    }()
 
+    sqlInsert := "INSERT INTO youtube.entities.chans (serial, title, custom_url, country, joined) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING"
+
+    for i := range ds {
+        d := ds[i]
+
+        _, err := db.Exec(sqlInsert, d.serial, d.title, d.customUrl, d.country, d.joined)
+        if err != nil {
+            panic(err)
+        }
+    }
+}
+
+func main() {
+    rand.Seed(time.Now().Unix())
+    for {
         chans := channels()
-        getData(chans)
+        datas := getData(chans)
+        insert(datas)
+
         runtime.GC()
     }
 }
