@@ -33,7 +33,7 @@ func connection() *sql.DB {
 }
 
 func Channels() []string {
-    sqlStr := "select serial from youtube.entities.channels LIMIT 50"
+    sqlStr := "select serial from youtube.entities.channels ORDER BY RANDOM() LIMIT 50"
     db := connection()
     defer func() {
         err := db.Close()
