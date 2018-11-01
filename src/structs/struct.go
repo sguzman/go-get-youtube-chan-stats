@@ -50,6 +50,7 @@ type StatusType struct {
 type ChannelType struct {
     Title string `json:"title"`
     Description string `json:"description"`
+    Keywords string `json:"keywords"`
     DefaultTab string `json:"defaultTab"`
     TrackingAnalyticsAccountId string `json:"trackingAnalyticsAccountId"`
     ModerateComments bool `json:"moderateComments"`

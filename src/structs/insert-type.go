@@ -25,6 +25,7 @@ type InsertType struct {
     privacyStatus string
     isLinked bool
     longUploadsStatus string
+    keywords []string
     defaultTab string
     trackingAnalyticsAccountId *string
     moderateComments bool

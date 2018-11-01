@@ -1,5 +1,7 @@
 package structs
 
+import "strings"
+
 func point(str string) *string {
     if len(str) == 0 {
         return nil
@@ -42,6 +44,7 @@ func structToInsert(resp ItemType) InsertType {
         privacyStatus: resp.Status.PrivacyStatus,
         isLinked: resp.Status.IsLinked,
         longUploadsStatus: resp.Status.LongUploadsStatus,
+        keywords: strings.Split(resp.BrandingSettings.Channel.Keywords, " "),
         defaultTab: resp.BrandingSettings.Channel.DefaultTab,
         trackingAnalyticsAccountId: point(resp.BrandingSettings.Channel.TrackingAnalyticsAccountId),
         moderateComments: resp.BrandingSettings.Channel.ModerateComments,
