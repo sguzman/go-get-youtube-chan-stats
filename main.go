@@ -2,6 +2,7 @@ package main
 
 import (
     "database/sql"
+    "encoding/json"
     "fmt"
     "github.com/imroc/req"
     _ "github.com/lib/pq"
@@ -111,14 +112,10 @@ type HintType struct {
     Value string `json:"value"`
 }
 
-type HintsType struct {
-    Hints []HintType `json:"hints"`
-}
-
 type BrandingSettingsType struct {
     Channel ChannelType `json:"channel"`
     Image ImageType `json:"image"`
-    Hints HintsType `json:"hints"`
+    Hints []HintType `json:"hints"`
 }
 
 type ItemType struct {
@@ -190,7 +187,7 @@ func getKey() string {
     return splitKeys[rand.Intn(len(splitKeys))]
 }
 
-func getJson(cs []string) string {
+func getJson(cs []string) ResponseType {
     key := getKey()
     url := "https://www.googleapis.com/youtube/v3/channels"
     partStr := "snippet,contentDetails,brandingSettings,contentOwnerDetails,invideoPromotion,localizations,status,topicDetails"
@@ -207,11 +204,18 @@ func getJson(cs []string) string {
         panic(err)
     }
 
-    str, err := r.ToString()
+    str, err := r.ToBytes()
     if err != nil {
         panic(err)
     }
-    return str
+
+    var data ResponseType
+    err = json.Unmarshal(str, &data)
+    if err != nil {
+        panic(err)
+    }
+
+    return data
 }
 
 func main() {
