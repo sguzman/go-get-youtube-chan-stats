@@ -51,6 +51,7 @@ func structToInsert(resp ItemType) InsertType {
         featuredChannelsUrls: points(resp.BrandingSettings.Channel.FeaturedChannelsUrls),
         unsubscribedTrailer: resp.BrandingSettings.Channel.UnsubscribedTrailer,
         profileColor: resp.BrandingSettings.Channel.ProfileColor,
+        country: point(resp.BrandingSettings.Channel.Country),
         bannerImageUrl: resp.BrandingSettings.Image.BannerImageUrl,
         bannerMobileImageUrl: resp.BrandingSettings.Image.BannerMobileImageUrl,
         bannerTabletLowImageUrl: resp.BrandingSettings.Image.BannerTabletLowImageUrl,

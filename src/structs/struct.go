@@ -59,6 +59,7 @@ type ChannelType struct {
     FeaturedChannelsUrls []string `json:"featuredChannelsUrls"`
     UnsubscribedTrailer string `json:"unsubscribedTrailer"`
     ProfileColor string `json:"profileColor"`
+    Country string `json:"country"`
 }
 
 type ImageType struct {
