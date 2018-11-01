@@ -64,6 +64,6 @@ func structToInsert(resp ItemType) InsertType {
         bannerTvImageUrl: resp.BrandingSettings.Image.BannerTvImageUrl,
         bannerTvLowImageUrl: resp.BrandingSettings.Image.BannerTvLowImageUrl,
         bannerTvMediumImageUrl: resp.BrandingSettings.Image.BannerTvMediumImageUrl,
-        bannerTvHighImageUrl: resp.BrandingSettings.Image.BannerTvHighImageUrl,,
+        bannerTvHighImageUrl: resp.BrandingSettings.Image.BannerTvHighImageUrl,
     }
 }
