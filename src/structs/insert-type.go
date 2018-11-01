@@ -34,7 +34,7 @@ type InsertType struct {
     featuredChannelsUrls *[]string
     unsubscribedTrailer string
     profileColor string
-    country *string
+    country string
     bannerImageUrl string
     bannerMobileImageUrl string
     bannerTabletLowImageUrl string
