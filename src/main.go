@@ -1,73 +1,17 @@
 package main
 
 import (
-    "database/sql"
+    "./structs"
+    "./postgres"
     "encoding/json"
     "fmt"
     "github.com/imroc/req"
-    _ "github.com/lib/pq"
     "math/rand"
     "os"
     "runtime"
     "strings"
-    "./structs"
     "time"
 )
-
-const (
-    defaultHost = "192.168.1.63"
-    defaultPort = "30000"
-)
-
-func connStr() string {
-    host := os.Getenv("DB_HOST")
-    port := os.Getenv("DB_PORT")
-
-    if len(host) == 0 || len(port) == 0 {
-        return fmt.Sprintf("user=postgres dbname=youtube host=%s port=%s sslmode=disable", defaultHost, defaultPort)
-    } else {
-        return fmt.Sprintf("user=postgres dbname=youtube host=%s port=%s sslmode=disable", host, port)
-    }
-}
-
-func connection() *sql.DB {
-    db, err := sql.Open("postgres", connStr())
-    if err != nil {
-        panic(err)
-    }
-
-    return db
-}
-
-func channels() []string {
-    sqlStr := "select serial from youtube.entities.channels LIMIT 50"
-    db := connection()
-    defer func() {
-        err := db.Close()
-        if err != nil {
-            panic(err)
-        }
-    }()
-
-    row, err := db.Query(sqlStr)
-    if err != nil {
-        panic(err)
-    }
-
-    serials := make([]string, 0)
-    for row.Next() {
-        var serial string
-
-        err = row.Scan(&serial)
-        if err != nil {
-            panic(err)
-        }
-
-        serials = append(serials, serial)
-    }
-
-    return serials
-}
 
 func getKey() string {
     rawKey := os.Getenv("API_KEY")
@@ -110,7 +54,7 @@ func getJson(cs []string) structs.ResponseType {
 func main() {
     rand.Seed(time.Now().Unix())
     for {
-        chans := channels()
+        chans := postgres.Channels()
         data := getJson(chans)
         fmt.Println(data)
 
