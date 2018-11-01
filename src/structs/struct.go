@@ -7,8 +7,8 @@ type LocalizedType struct {
 
 type ThumbnailType struct {
     Url string `json:"url"`
-    Width uint64 `json:"width"`
-    Height uint64 `json:"height"`
+    Width uint8 `json:"width"`
+    Height uint8 `json:"height"`
 }
 
 type ThumbnailsType struct {
