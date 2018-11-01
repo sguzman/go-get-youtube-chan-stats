@@ -67,3 +67,14 @@ func structToInsert(resp ItemType) InsertType {
         bannerTvHighImageUrl: resp.BrandingSettings.Image.BannerTvHighImageUrl,
     }
 }
+
+func Transform(items []ItemType) []InsertType {
+    inserts := make([]InsertType, len(items))
+    for i := range items {
+        item := items[i]
+        insert := structToInsert(item)
+        inserts[i] = insert
+    }
+
+    return inserts
+}

@@ -7,14 +7,14 @@ type InsertType struct {
     customUrl *string
     publishedAt string
     defaultUrl string
-    defaultWidth uint8
-    defaultHeight uint8
+    defaultWidth uint64
+    defaultHeight uint64
     mediumUrl string
-    mediumWidth uint8
-    mediumHeight uint8
+    mediumWidth uint64
+    mediumHeight uint64
     highUrl string
-    highWidth uint8
-    highHeight uint8
+    highWidth uint64
+    highHeight uint64
     localizedTitle string
     localizedDescription string
     uploadsPlaylist string
