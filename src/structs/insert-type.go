@@ -1,0 +1,51 @@
+package structs
+
+type InsertType struct {
+    id string
+    title string
+    description *string
+    customUrl *string
+    publishedAt string
+    defaultUrl string
+    defaultWidth uint8
+    defaultHeight uint8
+    mediumUrl string
+    mediumWidth uint8
+    mediumHeight uint8
+    highUrl string
+    highWidth uint8
+    highHeight uint8
+    localizedTitle string
+    localizedDescription string
+    uploadsPlaylist string
+    watchHistory string
+    watchLater string
+    topicIds []string
+    topicCategories []string
+    privacyStatus string
+    isLinked bool
+    longUploadsStatus string
+    defaultTab string
+    trackingAnalyticsAccountId *string
+    moderateComments bool
+    showRelatedChannels bool
+    showBrowseView bool
+    featuredChannelsTitle string
+    featuredChannelsUrls *[]string
+    unsubscribedTrailer string
+    profileColor string
+    bannerImageUrl string
+    bannerMobileImageUrl string
+    bannerTabletLowImageUrl string
+    bannerTabletImageUrl string
+    bannerTabletHdImageUrl string
+    bannerTabletExtraHdImageUrl string
+    bannerMobileLowImageUrl string
+    bannerMobileMediumHdImageUrl string
+    bannerMobileHdImageUrl string
+    bannerMobileExtraHdImageUrl string
+    bannerTvImageUrl string
+    bannerTvLowImageUrl string
+    bannerTvMediumImageUrl string
+    bannerTvHighImageUrl string
+}
