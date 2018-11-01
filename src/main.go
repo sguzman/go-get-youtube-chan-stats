@@ -1,8 +1,8 @@
 package main
 
 import (
-    "./structs"
     "./postgres"
+    "./structs"
     "encoding/json"
     "fmt"
     "github.com/imroc/req"
